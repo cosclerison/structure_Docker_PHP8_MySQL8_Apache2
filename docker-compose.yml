@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  apache:
+    build: .
+    container_name: apache_php8
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./apache/web.conf:/etc/apache2/sites-available/000-default.conf
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: project_php8
+      MYSQL_USER: user
+      MYSQL_PASSWORD: my_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database:/mnt/backup_bank
+
+volumes:
+  db_data:
